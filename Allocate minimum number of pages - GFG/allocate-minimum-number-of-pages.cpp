@@ -21,17 +21,17 @@ class Solution
 
             if(A[i]>m) return false;
 
-            if(pages+A[i]>m){
-
+            if(pages+A[i]>m)
+            {
                 stucount++;
-
                 if(stucount>M) return false;
-
                 pages=A[i];
 
-            }else pages += A[i];
-
-        }return true;
+            }
+            else 
+            pages += A[i];
+        }
+        return true;
 
         }
 

@@ -1,20 +1,20 @@
 class Solution {
 public:
     int maximumBags(vector<int>& cap, vector<int>& ro, int ar) {
-        vector<int>v1;
+        //vector<int>v1;
         for(int i=0;i<cap.size();i++)
         {
-            v1.push_back(cap[i]-ro[i]);
+            cap[i]=(cap[i]-ro[i]);
             
         }
-        sort(v1.begin(),v1.end());
-        int ans=count(v1.begin(),v1.end(),0);
-        for(int i=0;i<v1.size();i++)
+        sort(cap.begin(),cap.end());
+        int ans=count(cap.begin(),cap.end(),0);
+        for(int i=0;i<cap.size();i++)
         {
-            if(v1[i]!=0 && v1[i]<=ar)
+            if(cap[i]!=0 && cap[i]<=ar)
             {
                 ans++;
-                ar-=v1[i];
+                ar-=cap[i];
             }
             else if(ar<=0)return ans;
         }

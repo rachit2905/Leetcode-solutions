@@ -8,9 +8,12 @@ public:
             
         }
         sort(cap.begin(),cap.end());
-        int ans=count(cap.begin(),cap.end(),0);
+        int ans=0;
         for(int i=0;i<cap.size();i++)
         {
+            if(cap[i]==0){
+                ans++;continue;
+            }
             if(cap[i]!=0 && cap[i]<=ar)
             {
                 ans++;

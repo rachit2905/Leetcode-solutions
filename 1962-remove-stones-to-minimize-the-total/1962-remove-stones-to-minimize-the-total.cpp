@@ -1,23 +1,19 @@
 class Solution {
 public:
     int minStoneSum(vector<int>& piles, int k) {
-       priority_queue<int>s1;
-        for(auto it:piles)
-        {
-            s1.push(it);
+        const int max = piles.size() - 1;
+        int index = max, out = 0;
+        std::sort(piles.begin(), piles.end());
+        piles[index]++; piles[index]>>=1;
+        while (--k) {
+            if (piles[(index == 0) ? 0 : --index] < piles[max]) {
+                index = max;
+                std::sort(piles.begin(), piles.end());
+            }
+            piles[index]++; piles[index]>>=1;
         }
-        while(k--)
-        {
-           int temp=s1.top();
-            s1.pop();
-            s1.push(ceil(temp/2.0));
+        for (const auto& r : piles) {
+            out += r;
         }
-        int ans=0;
-        while(!s1.empty())
-        {
-            ans+=s1.top();
-            s1.pop();
-        }
-        return ans;
-    }
+        return out;}
 };

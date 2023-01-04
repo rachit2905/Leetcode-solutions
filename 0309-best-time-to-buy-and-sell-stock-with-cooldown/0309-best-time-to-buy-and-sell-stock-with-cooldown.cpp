@@ -1,32 +1,38 @@
 class Solution {
 public:
-    int dp[5001][2];
-    int helper(vector<int> &prices, int curr, int n, bool hadBought){
-        if(curr>=n){
-            return 0;
-        }
-        if(dp[curr][hadBought]!=-1){
-            return dp[curr][hadBought];
-        }
-        int profit=0;
+    int maxProfit(vector<int>& prices) {
+        int dp[prices.size() + 2][2];
         
-        if(hadBought==false){
-            int BUY=(-prices[curr])+helper(prices,curr+1,n,true);  // -ve price because buying takes money out of pocket
-            int NOT_BUY=helper(prices,curr+1,n,hadBought);
-            profit=max(BUY,NOT_BUY);
-        }
-        
-        else{
-            int SELL=prices[curr]+helper(prices,curr+2,n,false);
-            int NOT_SELL=helper(prices,curr+1,n,hadBought);
-            profit=max(SELL,NOT_SELL);
-        }
-        return dp[curr][hadBought]=profit;
-    }
+
+        for(int day = (int)prices.size() + 1;day >= 0;day--){
+            for(int buy = 0;buy <= 1;buy++){
+                
     
-    int maxProfit(vector<int>& prices){
-        memset(dp,-1,sizeof(dp));
-        int n=prices.size();
-        return helper(prices,0,n,false);
+                int &ans = dp[day][buy];
+                
+                if(day >= prices.size()){
+                    ans = 0;
+                }else{
+                    
+                    // First Choice
+                    int ans1 = dp[day + 1][buy]; // no transaction this say
+                
+                    
+                    // Second Choice
+                    int ans2 = 0; // doing the required transaction this day
+                    
+                    if(buy){
+                        ans2 = -prices[day] + dp[day + 1][0];
+                    }else{
+                        ans2 = prices[day] + dp[day + 2][1];
+                    }
+                    
+                    ans = max(ans1, ans2);
+                    
+                }
+            }
+        }
+        
+        return dp[0][1];
     }
 };

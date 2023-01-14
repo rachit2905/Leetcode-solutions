@@ -1,41 +1,45 @@
-class Solution
-{
-    public:
-        int minMutation(string start, string end, vector<string> &bank)
+class Solution {
+public:
+    int minMutation(string start, string end, vector<string>& bank) {
+        if(find(bank.begin(),bank.end(),end)==bank.end())return -1;
+        queue<string>q1;
+        map<string,bool>vis;
+        for(auto it:bank)
         {
-            string g = "ACGT";
-            queue<pair<string, int>> q;
-            q.push(make_pair(start, 0));
-            map<string, int> m;
-            m[start] = 1;
-            int siz = (int) bank.size();
-            while (!q.empty())
+            vis.insert({it,0});
+        }
+        q1.push(start);
+        vis.insert({start,1});
+        char ar[]={'A','T','C','G'};
+        int steps=0;
+        while(!q1.empty())
+        {
+            int sz=q1.size();
+            for(int i=0;i<sz;i++)
             {
-                pair<string, int> front = q.front();
-                q.pop();
-                if (front.first == end) return front.second;
-
-                for (int i = 0; i < 8; ++i)
+                string temp=q1.front();
+                string temp1=temp;
+                q1.pop();
+                if(temp==end)return steps;
+                for(int i=0;i<temp.length();i++)
                 {
-                    string tmp = front.first;
-                    for (int k = 0; k < 4; ++k)
+                    for(int j=0;j<4;j++)
                     {
-                        tmp[i] = g[k];
-                        if (!m.count(tmp))
+                        temp=temp1;
+                        if(ar[j]!=temp[i])
                         {
-                            for (int j = 0; j < siz; ++j)
+                            temp[i]=ar[j];
+                            if(find(bank.begin(),bank.end(),temp)!=bank.end() && vis[temp]==0)
                             {
-                                if (tmp == bank[j])
-                                {
-                                    q.push(make_pair(tmp, front.second + 1));
-                                    m[tmp] = 1;
-                                    break;
-                                }
+                                q1.push(temp);
+                                vis[temp]=1;
                             }
                         }
                     }
                 }
             }
-            return -1;
+            steps++;
         }
+        return -1;
+    }
 };

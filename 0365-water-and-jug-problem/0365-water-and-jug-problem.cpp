@@ -1,26 +1,13 @@
 class Solution {
 public:
-    bool canMeasureWater(int x, int y, int z) {
-         vector<int>vist(x+y+1,0);
-        if(z>x+y)return false;
-        int direction[]={x,-x,y,-y};
-        queue<int>q;
-        q.push(0);
-        vist[0]=1;
-        while(!q.empty()){
-            int curr=q.front();
-            q.pop();
-            for(auto it:direction){
-                int total=curr+it;
-                if(total==z)return true;
-                if(total<0||total>x+y)continue;
-                if(vist[total]==0){
-                    q.push(total);
-                    vist[total]=1;
-                }
-            }
-
-        }
-        return false;
+   int gcdcalc(int a,int b){
+        if(a==b) return a;
+        else if(a>b) return gcdcalc(a-b,b);
+        else return gcdcalc(a,b-a);
+    }
+    bool canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity) {
+        if(jug1Capacity+jug2Capacity<targetCapacity) return false;
+        else if(targetCapacity%gcdcalc(jug1Capacity,jug2Capacity)!=0) return false;
+        else return true;
     }
 };

@@ -17,7 +17,7 @@ class Solution
                 1,
                 -1
             };
-              m[e[0]][e[1]] = '+';
+            m[e[0]][e[1]] = '+';
             while (!q1.empty())
             {
 
@@ -26,19 +26,18 @@ class Solution
                 {
                     auto it = q1.front();
                     q1.pop();
-                  
+
                     for (int i = 0; i < 4; i++)
                     {
                         int x1 = it.first + x[i];
                         int y1 = it.second + y[i];
-                        if(x1<0 || y1<0 || x1>=m.size()|| y1>=m[0].size() || m[x1][y1]=='+')continue;
+                        if (x1 < 0 || y1 < 0 || x1 >= m.size() || y1 >= m[0].size() || m[x1][y1] == '+') continue;
                         if (x1 == 0 || y1 == 0 || y1 == m[0].size() - 1 || x1 == m.size() - 1 && m[x1][y1] != '+')
                             return moves;
-                        
-                            m[x1][y1] = '+';
-                            q1.push({ x1,
-                                y1 });
-                        
+
+                        m[x1][y1] = '+';
+                        q1.push({ x1,
+                            y1 });
                     }
                 }
                 moves++;

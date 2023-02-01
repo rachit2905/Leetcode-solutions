@@ -11,26 +11,31 @@
  */
 class Solution {
 public:
-      vector<vector<int>> elements;
-
-    void getEls(TreeNode * root, int level) {
-        if (root == nullptr) return;
-        vector<int> tmp;
-        if (this->elements.size() <= level) this->elements.push_back(tmp);
-        this->elements[level].push_back(root->val);
-        getEls(root->right, level+1);
-        getEls(root->left, level+1);
-    }
-
     vector<double> averageOfLevels(TreeNode* root) {
-        vector<double> res;
-        getEls(root, 0);
-        for (auto vec : this->elements) {
-            long int sum = 0;
-            for (auto el : vec)
-                sum += el;
-            res.push_back((double)sum / (double)vec.size());
+         vector<double>ans;
+        queue<TreeNode*>q;
+        if(root==NULL)
+        return ans;
+        q.push(root);
+        while(!q.empty()){
+            int n=q.size();
+            double sum=0;
+            for(int i=0;i<n;i++){
+                TreeNode*x=q.front();
+                sum+=x->val;
+                q.pop();
+                if(x->left)
+                q.push(x->left);
+                if(x->right)
+                q.push(x->right);
+            }
+            if(n==0)
+            ans.push_back(sum);
+            else{
+                ans.push_back(sum/n);
+            }
         }
-        return res;
+        return ans;
     }
+    
 };

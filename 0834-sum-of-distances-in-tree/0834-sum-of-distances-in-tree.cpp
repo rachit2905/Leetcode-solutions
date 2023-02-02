@@ -1,35 +1,34 @@
-
 class Solution {
-private:
-    void calcPN(int u, vector<vector<int>> &g, vector<int> &P, vector<int> &N, int parent = -1) {
-        N[u] = 1;
-        P[u] = 0;
-        for (int v : g[u]) {
-            if (v == parent) continue;
-            calcPN(v,g,P,N,u);
-            N[u] += N[v];
-            P[u] += P[v] + N[v];
-        }
-    }
-    void calcS(int u, vector<vector<int>> &g, vector<int> &N, vector<int> &S, int n, int parent = -1) {
-        if (u != 0) {
-            S[u] = S[parent] + n - 2 * N[u];
-        }
-        for (int v : g[u]) {
-            if (v != parent) calcS(v,g,N,S,n,u);
-        }
-    }
 public:
-    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
-        vector<vector<int>> g(n);
-        for (vector<int> e: edges) {
-            g[e[0]].push_back(e[1]);
-            g[e[1]].push_back(e[0]);
+    int DFS(vector<int> g[], int node, vector<int> &sum, int parent, vector<int> & subtree, int val){
+        sum[0] += val, subtree[node] = 1;
+        for(auto &n : g[node]){
+            if( n != parent ){
+                subtree[node] += DFS(g, n, sum, node, subtree, val+1);
+            }
         }
-        vector<int> S(n,0), P(n,0), N(n,0);
-        calcPN(0,g,P,N);
-        S[0] = P[0];
-        calcS(0,g,N,S,n);
-        return S;
+        return subtree[node];
+    }
+
+    void findSum(vector<int> g[], int node, vector<int> &sum, int parent, vector<int> & subtree){
+        sum[node] = sum[parent] + (subtree[0] - subtree[node]) - subtree[node];
+        for(auto &n : g[node]){
+            if( n != parent ){
+                findSum(g, n, sum, node, subtree);
+            }
+        }
+    }
+
+    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
+        vector<int> g[n], sum(n, 0), subtree(n, 0);
+        for(auto &edge : edges){
+            g[edge[0]].push_back(edge[1]);
+            g[edge[1]].push_back(edge[0]);
+        }
+        DFS(g, 0, sum, -1, subtree, 0);
+        for(auto &child : g[0]){
+            findSum(g, child, sum, 0, subtree);
+        }
+        return sum;
     }
 };

@@ -11,23 +11,22 @@
  */
 class Solution {
 public:
-    vector<TreeNode*> solve(int n){
-        //base case
-        if(n==1)return {new TreeNode() };
-        vector<TreeNode*> ans;
-        for(int i=1;i<n;i+=2){
-            vector<TreeNode*> left  = solve(i);
-            vector<TreeNode*> right = solve(n-i-1);
-            for(auto l:left){
-                for(auto r:right){
-                    ans.push_back(new TreeNode(0,l,r));
+    vector<TreeNode*> allPossibleFBT(int n) {
+         vector<TreeNode*>t;
+        if(n%2==0)
+            return t;
+        vector<vector<TreeNode*>>v(n+1);
+        v[0].push_back(NULL);
+        v[1].push_back(new TreeNode());
+        for(int i=3;i<n+1;i+=2){
+            for(int j=1,k=i-2;k>0;j+=2,k-=2){
+                for(auto x:v[j]){
+                    for(auto y:v[k]){
+                        v[i].push_back(new TreeNode(0,x,y));
+                    }
                 }
             }
         }
-        return ans;
-    }
-    vector<TreeNode*> allPossibleFBT(int n) {
-        if(n%2==0)return {};
-        return solve(n);
+        return v[n];
     }
 };

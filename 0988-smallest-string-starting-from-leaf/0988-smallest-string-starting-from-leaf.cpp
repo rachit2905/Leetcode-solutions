@@ -12,23 +12,33 @@
 class Solution {
 public:
     
-   vector<string>ans;
-    void depth(TreeNode*root,string s){
-        if(root==NULL){
+   string ans = "";
+    void solve(TreeNode *root, string temp)
+    {
+        temp += root->val + 'a';
+
+        if (!root->left and !root->right)
+        {
+            reverse(temp.begin(), temp.end());
+
+            if (ans == "" or temp < ans)
+                ans = temp;
+
             return;
         }
-        s+=char(root->val+'a');
-        if(root->left==NULL && root->right==NULL){
-            reverse(s.begin(),s.end());
-            ans.push_back(s);
-        }
-        depth(root->left,s);
-        depth(root->right,s);
+
+        if (root->left)
+            solve(root->left, temp);
+
+        if (root->right)
+            solve(root->right, temp);
     }
-    string smallestFromLeaf(TreeNode* root) {
-       string s;
-       depth(root,s);
-       sort(ans.begin(),ans.end());
-        return ans[0];
+
+    string smallestFromLeaf(TreeNode *root)
+    {
+        string temp = "";
+        solve(root, temp);
+
+        return ans;
     }
 };

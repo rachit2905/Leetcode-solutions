@@ -1,53 +1,36 @@
 class Solution {
 public:
-    int maxScoreWords(vector<string>& words, vector<char>& letters, vector<int>& score) {
-        map<char,int>m1,m2;
-        for(auto it:letters)
-            m1[it]++;
-        m2=m1;
-        int n=words.size(),ans=0;
-        for(int i=0;i<pow(2,n);i++)
-        {
-            string s="";
-            int x=i;
-            while(x>0)
-            {
-                if(x%2)s="1"+s;
-                else s="0"+s;
-                x/=2;
+     map<pair<int,vector<int>> ,int> m;
+    int maxCount(vector<string> &words, int i, vector<int> &freq, vector<int>&score) {
+        if(i >= words.size()) return 0;
+        if(m.find({i, freq}) != m.end()) return m[{i, freq}];
+        //if word can be formed or not from the available letters
+        bool isPossible = true;
+        vector<int> temp = freq;
+        int scoreTemp = 0;
+        for(int j = 0; j < words[i].length(); j++) {
+            if(temp[words[i][j] - 'a'] - 1 < 0) {
+                isPossible = false;
+                break;
             }
-            
-            while(s.length()<n)
-            {
-                s="0"+s;
-            }
-            int co1=0,ans1=0;
-            for(int i=0;i<n;i++)
-            {
-                if(s[i]=='1')
-                {
-                    int co=0;
-                  // string s1=words[i];
-                    int ans2=0;
-                   for(auto it:words[i])
-                   {
-                       if(m1[it]>0)
-                       {
-                           m1[it]--;
-                           ans2+=score[it-'a'];
-                       }
-                       else
-                           co=1;
-                   }
-                    if(!co)ans1+=ans2;
-                    else {co1=1;break;}
-                }
-            }
-            m1=m2;
-            if(co1)continue;
-            else
-               ans=max(ans,ans1);
+            temp[words[i][j] - 'a']--;
+            scoreTemp += score[words[i][j] - 'a'];
         }
-        return ans;
+        //take it
+        int op1 = 0;
+        
+        if(isPossible) {
+            op1 = scoreTemp + maxCount(words, i + 1, temp, score);
+        }
+        //not taking it
+        int op2 = maxCount(words, i + 1, freq, score);
+        return m[{i, freq}] = max(op1, op2);
+    }
+    int maxScoreWords(vector<string>& words, vector<char>& letters, vector<int>& score) {
+        vector<int> freq(26, 0);
+        for(int i = 0; i < letters.size(); i++) {
+            freq[letters[i] - 'a']++;
+        }
+        return maxCount(words, 0, freq, score);
     }
 };

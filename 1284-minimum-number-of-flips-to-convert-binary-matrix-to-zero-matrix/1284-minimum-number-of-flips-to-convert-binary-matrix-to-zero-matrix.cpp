@@ -1,74 +1,35 @@
 class Solution {
 public:
-    void helper(int times,vector<vector<int>> &mat,vector<vector<bool>>& c,int counter,bool& checker,int ni)
-    {
-        if(checker) return;
-        if(times==counter)
-                {
-                    if(check(mat)) {checker=true;return;}
-                    else return;
-                }
-        for(int i=ni/mat[0].size();i<mat.size();i++)
-        {
-            for(int j=ni%mat[0].size();j<mat[i].size();j++)
-            {
-                
-                if(!c[i][j])
-                {
-                    counter++;
-                    c[i][j]=true;
-                    flip(mat,i,j);
-                    helper(times,mat,c,counter,checker,i*mat[0].size());
-                    flip(mat,i,j);
-                    c[i][j]=false;
-                    counter--;
-                }
-            }
-        }
-
-
-
+    int n, m;
+    vector<vector<int>>& flip(vector<vector<int>>& mat, int y, int x) {
+        mat[y][x] ^= 1;
+        if(y - 1 >= 0) mat[y-1][x] ^= 1;
+        if(y + 1 <  n) mat[y+1][x] ^= 1;
+        if(x - 1 >= 0) mat[y][x-1] ^= 1;
+        if(x + 1 <  m) mat[y][x+1] ^= 1;
+        return mat;
     }
-    void flip(vector<vector<int>> & mat,int i,int j)
-    {
-        mat[i][j]^=1;
-        if(i!=0){mat[i-1][j]^=1;}
-      
-        if(i!=mat.size()-1){mat[i+1][j]^=1;}
-    
-        if(j!=0){mat[i][j-1]^=1;}
-      
-        if(j!=mat[0].size()-1){mat[i][j+1]^=1;}
-       
-    }
-    bool check(vector<vector<int>> &mat)
-    {
-        for(int i=0;i<mat.size();i++)
-        {
-            for(int j=0;j<mat[i].size();j++)
-            {
-                if(mat[i][j]!=0) return false;
-            }
-        }
+
+    bool isZeroMat(vector<vector<int>>& mat) {
+        for(auto i = 0; i < n; ++i)
+            for(auto j = 0; j < m; ++j)
+                if(mat[i][j])
+                    return false;
         return true;
     }
+
+    int FlipOrNotFlip(vector<vector<int>> mat, int y, int x) {
+        if(x == m) y++, x = 0;
+        if(y == n) return isZeroMat(mat) ? 0:10000;
+
+        auto ret1 = FlipOrNotFlip(mat, y, x+1);
+        auto ret2 = FlipOrNotFlip(flip(mat, y, x), y, x+1) + 1;
+        return min(ret1, ret2);
+    }
+
     int minFlips(vector<vector<int>>& mat) {
-         if(check(mat)) return 0;
-         if(mat.size()==1&&mat[0].size()==1) return 1;
-         vector<vector<bool>> c;
-         vector<bool> v(mat[0].size(),false);
-         bool checker=false;
-             for(int j=0;j<mat.size();j++)
-             {
-                 c.push_back(v);
-             }
-         
-         for(int i=1;i<mat.size()*mat[0].size()+1;i++)
-         {
-             helper(i,mat,c,0,checker,0);
-             if(checker) return i;
-         }
-         return -1;
-          
+        n = mat.size(), m = mat[0].size();
+        auto ret = FlipOrNotFlip(mat, 0, 0);
+        return (ret >= 10000 ? -1 : ret);
     }
 };

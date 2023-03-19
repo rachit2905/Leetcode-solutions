@@ -3,19 +3,19 @@ public:
     bool checkValidGrid(vector<vector<int>>& grid) {
         if(grid[0][0]!=0)return 0;
         int co=0,x=0,y=0,n=grid.size(),co1=0;
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<n;j++)
-            {
-                if(grid[i][j]==0)
-                {
-                    x=i,y=j;co1=1;
-                    break;
-                }
+//         for(int i=0;i<n;i++)
+//         {
+//             for(int j=0;j<n;j++)
+//             {
+//                 if(grid[i][j]==0)
+//                 {
+//                     x=i,y=j;co1=1;
+//                     break;
+//                 }
                 
-            }
-            if(co1)break;
-        }
+//             }
+//             if(co1)break;
+//         }
         //vector<vector<int>>vis(n,vector<int>(n,0));
         //vis[x][y]=1;
         vector<pair<int,int>>v2;

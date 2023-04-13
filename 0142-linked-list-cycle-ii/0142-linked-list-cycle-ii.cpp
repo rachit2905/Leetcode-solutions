@@ -8,18 +8,39 @@
  */
 class Solution {
 public:
+    int help(ListNode *slow)
+{
+    ListNode* temp=slow;int ans=0;
+    temp=temp->next;
+    while(temp!=slow)
+    {
+        ans++;
+        temp=temp->next;
+    }
+    return ans+1;
+}
     ListNode *detectCycle(ListNode *head) {
-         unordered_map<ListNode*,int>m1;
-        if(head==NULL){
-          return NULL;
+        ListNode* fast=head;
+        ListNode* slow=head;
+        while(fast!=NULL && fast->next!=NULL)
+        {
+            fast=fast->next->next;
+            slow=slow->next;
+            if(slow==fast){
+                int x=help(slow);
+                fast=slow=head;
+                while(x--)
+                {
+                    fast=fast->next;
+                }
+                while(fast!=slow)
+                {
+                    fast=fast->next;
+                    slow=slow->next;
+                }
+                return slow;
+            };
         }
-        while(m1[head]==0){
-          m1[head]++;
-          if(head->next==NULL){
-            return NULL;
-          }
-          head=head->next;
-        }
-        return head;
+        return NULL;
     }
 };

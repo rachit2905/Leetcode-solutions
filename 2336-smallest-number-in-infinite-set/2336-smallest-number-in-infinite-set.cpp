@@ -1,49 +1,36 @@
 class SmallestInfiniteSet {
 public:
-    priority_queue<int,vector<int>,greater<int>>q1;
+    priority_queue<int,vector<int>,greater<int>>pq;
+    int store[1001];  // all ele initilased to 0
+
     SmallestInfiniteSet() {
+        
         for(int i=1;i<=1000;i++)
-            q1.push(i);
+        {
+            pq.push(i);
+            store[i]=1; // 1 signifies ele is present
+        }
+     
     }
     
     int popSmallest() {
-        int x=q1.top();
-        q1.pop();
-        return x;
+       int ele=pq.top();
+        pq.pop();
+        store[ele]=0; //0 signifies ele nahi hai kyuki mene pop kiya
+
+        return ele;
+        
     }
     
     void addBack(int num) {
-         stack<int>s1;
-         
-         while(q1.size()>0)
-         {
-             if(q1.top()!=num)
-             {
-                 s1.push(q1.top());
-                 q1.pop();
-             }
-             else
-             {
-                
-                 break;
-             }
-            
-         }
-        if(q1.size()==0)
+        if(store[num]==1)
+        return;
+
+        else // store[num]==0 , matlab number nhi hai
         {
-            s1.push(num);
+            store[num]=1;
+            pq.push(num);
         }
-        while(!s1.empty())
-        {
-            q1.push(s1.top());
-            s1.pop();
-        }
+       
     }
 };
-
-/**
- * Your SmallestInfiniteSet object will be instantiated and called as such:
- * SmallestInfiniteSet* obj = new SmallestInfiniteSet();
- * int param_1 = obj->popSmallest();
- * obj->addBack(num);
- */

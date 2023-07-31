@@ -17,7 +17,8 @@ public:
         for(auto it:nums)total+=it;
         if(target>total)return 0;
         vector<vector<int>>dp(nums.size(),vector<int>(2*total+1,-1));
-        return help(nums,target,0,total,dp,0);
+    return     help(nums,target,0,total,dp,0);
+    
         
     }
 };

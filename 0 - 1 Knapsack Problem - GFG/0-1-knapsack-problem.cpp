@@ -8,30 +8,29 @@ class Solution
 {
     public:
     //Function to return max value that can be put in knapsack of capacity W.
-    int help( int wt[], int val[],vector<vector<int>>&dp,int W,int ind,int n)
-    {
-        if(ind==0 || W==0)return 0;
-        if(dp[ind][W]!=0)return dp[ind][W];
-        if(W-wt[ind-1]>=0) dp[ind][W]=max(dp[ind][W]+help(wt,val,dp,W,ind-1,n),dp[ind][W]+val[ind-1]+help(wt,val,dp,W-wt[ind-1],ind-1,n));
-    
-        else dp[ind][W]+=help(wt,val,dp,W,ind-1,n);
-        return dp[ind][W];
-    }
     int knapSack(int W, int wt[], int val[], int n) 
     { 
        // Your code here
-       vector<vector<int>>dp(n+1,vector<int>(W+1,0));
-       //memset(dp,0,sizeof(dp));
-       help(wt,val,dp,W,n,n);
-    //   for(int i=0;i<=n;i++)
-    //   {
-    //       for(int j=0;j<=W;j++)
-    //       cout<<dp[i][j]<<" ";
-    //       cout<<"\n";
-    //   }
-       return dp[n][W];
+       int w=W;
+       int dp[n+1][w+1];
+       for(int i=0;i<=w;i++)dp[0][i]=0;
+       for(int j=0;j<=n;j++)dp[j][0]=0;
+       for(int i=1;i<=n;i++)
+       {
+           for(int j=1;j<=w;j++)
+           {
+               dp[i][j]=dp[i-1][j];
+               if(wt[i-1]<=j)
+               {
+                   dp[i][j]=max(dp[i-1][j],val[i-1]+dp[i-1][j-wt[i-1]]);
+               }
+           }
+       }
+       return dp[n][w];
     }
 };
+
+
 
 //{ Driver Code Starts.
 

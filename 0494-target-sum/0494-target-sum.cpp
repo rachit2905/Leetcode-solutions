@@ -1,35 +1,23 @@
 class Solution {
 public:
-    int findTargetSumWays(vector<int>& num, int targets) {
-            int totSum = 0;
-         int n=num.size();
-    for(int i=0; i<n;i++){
-        totSum += num[i];
-    }
-    
-    //Checking for edge cases
-    if(totSum-targets <0 || (totSum-targets)%2 ) return 0;
-        int tar=(totSum-targets)/2;
-        vector<vector<int>> dp(n,vector<int>(tar+1,0));
-    
-    if(num[0] == 0) dp[0][0] =2;  // 2 cases -pick and not pick
-    else dp[0][0] = 1;  // 1 case - not pick
-    
-    if(num[0]!=0 && num[0]<=tar) dp[0][num[0]] = 1;  // 1 case -pick
-    
-    for(int ind = 1; ind<n; ind++){
-        for(int target= 0; target<=tar; target++){
-            
-            int notTaken = dp[ind-1][target];
-    
-            int taken = 0;
-                if(num[ind]<=target)
-                    taken = dp[ind-1][target-num[ind]];
-        
-            dp[ind][target]= (notTaken + taken);
+    int help(vector<int>& nums, int target,int sum,int total, vector<vector<int>>&dp,int index)
+    {
+        if(index==nums.size())
+        {
+            if(sum==target)return 1;
+            else return 0;
         }
+        if(dp[index][sum+total]!=-1)return dp[index][sum+total];
+        int add=help(nums,target,sum+nums[index],total,dp,index+1);
+        int sub=help(nums,target,sum-nums[index],total,dp,index+1);
+        return dp[index][sum+total]=add+sub;
     }
-    return dp[n-1][tar];
-    
+    int findTargetSumWays(vector<int>& nums, int target) {
+       int total=0;
+        for(auto it:nums)total+=it;
+        if(target>total)return 0;
+        vector<vector<int>>dp(nums.size(),vector<int>(2*total+1,-1));
+        return help(nums,target,0,total,dp,0);
+        
     }
 };

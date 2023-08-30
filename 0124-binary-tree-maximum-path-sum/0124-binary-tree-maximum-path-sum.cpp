@@ -11,7 +11,7 @@
  */
 class Solution {
 public:
-     int subTreesum(TreeNode* root,int& mx)
+         int subTreesum(TreeNode* root,int& mx)
     {
         if(root==NULL) return 0;
 
@@ -35,3 +35,4 @@ public:
         return mx;
     }
 };
+    

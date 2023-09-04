@@ -9,100 +9,38 @@ using namespace std;
 
 class Solution{
 public:
+      int r[4]={-1, 0, 1, 0};
+    int c[4]={0, 1, 0, -1};
+    void dfs(int i, int j, int n, int m, vector<vector<char>>& mat, vector<vector<bool>>& vis){
+       vis[i][j]=true;
+        for(int k=0; k<4; ++k){
+            int ni=i+r[k];
+            int nj=j+c[k];
+            if(ni>=0 && ni<n && nj>=0 && nj<m && mat[ni][nj]=='O' && !vis[ni][nj]){
+                dfs(ni, nj, n, m, mat, vis);
+            }
+        }
+        
+    }
     vector<vector<char>> fill(int n, int m, vector<vector<char>> mat)
     {
         // code here
-         vector<vector<int>>vis(n,vector<int>(m,0));
-
-        queue<pair<int,int>>q;
-
-        for(int j=0;j<m;j++){
-
-            if(mat[0][j]=='O')
-
-            {
-
-                q.push({0,j});
-
-            }
-
-            if(mat[n-1][j]=='O'){
-
-                q.push({n-1,j});
-
-            }
-
-        }
-
-         for(int i=0;i<n;i++){
-
-            if(mat[i][0]=='O')
-
-            {
-
-                q.push({i,0});
-
-            }
-
-            if(mat[i][m-1]=='O'){
-
-                q.push({i,m-1});
-
-            }
-
-        }
-
-        while(!q.empty()){
-
-        int row=q.front().first;
-
-        int col=q.front().second;
-
-        q.pop();
-
-         vis[row][col]=1;
-
-            int delrow[]={-1,0,1,0};
-
-            int delcol[]={0,1,0,-1};
-
-            for(int i=0;i<4;i++){
-
-                int nrow=row+delrow[i];
-
-                int ncol=col+delcol[i];
-
-                
-
-                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && mat[nrow][ncol]=='O' &&vis[nrow][ncol]!=1){
-
-                    q.push({nrow,ncol});
-
-                    vis[nrow][ncol]=1;
-
+        vector<vector<bool>> vis(n, vector<bool>(m, false));
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<m; ++j){
+                if((i==0 || i==n-1 || j==0 || j==m-1) && mat[i][j]=='O' && !vis[i][j]){
+                    dfs(i, j,n, m, mat, vis);
                 }
-
             }
-
         }
-
-        vector<vector<char>>ans=mat;
-
-        for(int i=0;i<n;i++){
-
-            for(int j=0;j<m;j++){
-
-                if(vis[i][j]==0 && mat[i][j]=='O'){
-
-                    ans[i][j]='X';
-
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<m; ++j){
+                if(mat[i][j]=='O' && !vis[i][j]){
+                    mat[i][j]='X';
                 }
-
             }
-
         }
-
-        return ans;
+        return mat;
     }
 };
 

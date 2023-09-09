@@ -11,14 +11,18 @@ public:
 	// calculate the maximum sum with out adjacent
 	int findMaxSum(int *arr, int n) {
 	    // code here
-	    int dp[n+1];
-	    memset(dp,0,sizeof(dp));
-	    dp[0]=0,dp[1]=arr[0];
-	    for(int i=2;i<=n;i++)
+	    int ans=0;
+	    int dp[n];
+	    dp[0]=arr[0];
+	    for(int i=1;i<n;i++)
 	    {
-	        dp[i]=max(dp[i-1],dp[i-2]+arr[i-1]);
+	        int take=arr[i];
+	        if(i>1)
+	         take+=dp[i-2];
+	        int nottake=dp[i-1];
+	        dp[i]=max(take,nottake);
 	    }
-	    return dp[n];
+	    return dp[n-1];
 	}
 };
 

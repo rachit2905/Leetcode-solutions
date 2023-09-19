@@ -1,17 +1,25 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        int n=nums.size(),i=0;
-        while(i<n)
+        int slow = nums[0];
+        int fast = nums[0];
+
+        //find collision point
+        do{
+          slow = nums[slow];
+          fast = nums[nums[fast]];
+        }while(slow != fast);
+
+        fast = nums[0];
+
+        //find duplicate number
+        //distance of duplicate from stating point is multiple of distance from collision point
+        while(fast!=slow)
         {
-            int j=nums[i]-1;
-            if(nums[i]!=nums[j])
-                swap(nums[i],nums[j]);
-            else i++;
+          fast = nums[fast];
+          slow = nums[slow];
         }
-        for(int i=0;i<n;i++){
-            if(nums[i]!=i+1)return nums[i];
-        }
-      return -1;  
+
+        return slow;
     }
 };

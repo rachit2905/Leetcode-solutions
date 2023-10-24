@@ -21,33 +21,24 @@
  */
 class Solution {
 public:
-    TreeNode *helper(vector<int>&nums,int left,int right)
- {
-     if(left > right)
-     {
-         return NULL;
-     }
-     int mid = left + (right - left)/2;
-
-     TreeNode *temp = new TreeNode(nums[mid]);
-
-     // left recursion
-     temp->left = helper(nums,left,mid-1);
-     temp->right = helper(nums,mid+1,right);
-
-     return temp;
- }
-
     TreeNode* sortedListToBST(ListNode* head) {
-        vector<int>v;
-        ListNode *curr = head;
-        while(curr != NULL)
-        {
-            v.push_back(curr->val);
-            curr = curr->next;
+        
+        if(!head) return NULL;
+
+        ListNode* slow= head, *prev = NULL;
+        ListNode* fast = head;
+        while(fast and fast->next){
+            prev = slow;
+            slow = slow->next;
+            fast = fast->next->next;
         }
-
-        return helper(v,0,v.size()-1);
-
+        TreeNode* root = new TreeNode(slow->val);
+        if(prev) prev->next = NULL;
+        else head = NULL;
+        
+        ListNode* right = slow->next? slow->next: NULL;
+        root->left = sortedListToBST(head);
+        root->right = sortedListToBST(right);
+        return root;
     }
 };

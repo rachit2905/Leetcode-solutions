@@ -10,49 +10,28 @@ using namespace std;
 
 class Solution{
     public:
-    int maxLen(vector<int>&A, int n)
-    {   
-        // Your code here
-          int res =0;
-
-        int target = 0;
-
-        int sum =0;
-
-        vector<int> ps;
-
-        for(int i=0;i<n;i++){
-
-            sum += A[i];
-
-            if(sum == 0)
-
-            res = i+1;
-
-            ps.push_back(sum);
-
+       int maxLen(vector<int>&A, int n)
+    {      
+    unordered_map<int,int> mp;
+    int sum=0;
+    int maxi=0;
+    for(int i=0;i<n;i++){
+        sum+=A[i];
+        if(sum==0){
+           maxi=i+1;
         }
-
-        unordered_map<int,int> mp;
-
-        for(int i=0;i<n;i++){
-
-            
-
-            if(mp.find(ps[i]) != mp.end()){
-
-                res = max( i - (mp.find(ps[i])->second), res);
-
+        else{
+            if(mp.find(sum)!=mp.end()){
+                maxi=max(maxi,i-mp[sum]);
             }
-
-            
-
-            mp.insert(make_pair(ps[i],i));
-
-        }
-
-        return res;
+            else{
+            mp[sum]=i;
+           }
+             }
     }
+    return maxi;
+    }
+
 };
 
 
